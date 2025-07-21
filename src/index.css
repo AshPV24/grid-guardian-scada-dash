@@ -1,96 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    /* SCADA Enterprise Color System */
+    --primary: 220 91% 56%;           /* Electric Blue */
+    --primary-dark: 220 91% 45%;      /* Darker Blue */
+    --primary-glow: 220 91% 70%;      /* Lighter Blue Glow */
+    
+    --secondary: 142 76% 36%;         /* Success Green */
+    --secondary-dark: 142 76% 28%;    /* Darker Green */
+    
+    --accent: 45 93% 47%;             /* Warning Amber */
+    --accent-dark: 45 93% 38%;        /* Darker Amber */
+    
+    --destructive: 0 84% 60%;         /* Alert Red */
+    --destructive-dark: 0 84% 50%;    /* Darker Red */
+    
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    
+    --background: 224 71% 4%;         /* Deep Dark Blue */
+    --surface: 225 39% 8%;            /* Card Background */
+    --surface-elevated: 225 25% 12%;  /* Elevated Elements */
+    
+    --foreground: 210 40% 98%;        /* Primary Text */
+    --foreground-muted: 217 19% 65%;  /* Secondary Text */
+    
+    --border: 225 20% 20%;
+    --border-accent: 220 91% 56%;
+    
+    --ring: 220 91% 56%;
     --radius: 0.5rem;
+    
+    /* SCADA Specific Colors */
+    --grid-online: 142 76% 36%;       /* Online Green */
+    --grid-offline: 0 84% 60%;        /* Offline Red */
+    --grid-warning: 45 93% 47%;       /* Warning Amber */
+    --grid-emergency: 0 100% 50%;     /* Emergency Red */
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-surface: linear-gradient(135deg, hsl(var(--surface)), hsl(var(--surface-elevated)));
+    --gradient-alert: linear-gradient(135deg, hsl(var(--destructive)), hsl(var(--destructive-dark)));
+    
+    /* Glows and Effects */
+    --glow-primary: 0 0 20px hsl(var(--primary) / 0.3);
+    --glow-success: 0 0 20px hsl(var(--secondary) / 0.3);
+    --glow-danger: 0 0 20px hsl(var(--destructive) / 0.3);
+    --glow-warning: 0 0 20px hsl(var(--accent) / 0.3);
 
-    --sidebar-background: 0 0% 98%;
+    /* Legacy sidebar variables for compatibility */
+    --sidebar-background: 225 39% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 220 91% 56%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 225 25% 12%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 225 20% 20%;
+    --sidebar-ring: 220 91% 56%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Card colors using surface */
+    --card: 225 39% 8%;
+    --card-foreground: 210 40% 98%;
+    
+    /* Popover colors */
+    --popover: 225 25% 12%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Input colors */
+    --input: 225 20% 20%;
+    
+    /* Primary foreground */
+    --primary-foreground: 210 40% 98%;
+    --secondary-foreground: 210 40% 98%;
+    --accent-foreground: 224 71% 4%;
+    --destructive-foreground: 210 40% 98%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark mode already optimized for SCADA */
   }
 }
 
@@ -98,8 +89,100 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  }
+}
+
+@layer components {
+  .scada-card {
+    @apply bg-gradient-to-br from-surface to-surface-elevated border border-border/50 rounded-lg backdrop-blur-sm;
+    box-shadow: 0 4px 12px hsl(var(--background) / 0.3), inset 0 1px 0 hsl(var(--foreground) / 0.1);
+  }
+  
+  .scada-button {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+  
+  .scada-button::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] transition-transform duration-700;
+  }
+  
+  .scada-button:hover::before {
+    @apply translate-x-[100%];
+  }
+  
+  .status-indicator {
+    @apply relative w-4 h-4 rounded-full transition-all duration-300;
+  }
+  
+  .status-indicator::before {
+    content: '';
+    @apply absolute inset-0 rounded-full animate-pulse;
+  }
+  
+  .status-online {
+    @apply bg-grid-online;
+    box-shadow: var(--glow-success);
+  }
+  
+  .status-offline {
+    @apply bg-grid-offline;
+    box-shadow: var(--glow-danger);
+  }
+  
+  .status-emergency {
+    @apply bg-grid-emergency animate-pulse;
+    box-shadow: var(--glow-danger);
+  }
+  
+  .metric-display {
+    @apply font-mono text-2xl font-semibold tracking-wider;
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .grid-connection {
+    @apply stroke-2 transition-all duration-500;
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+  
+  .breach-alert {
+    @apply animate-pulse;
+    animation: breach-flash 0.5s infinite alternate;
+  }
+  
+  @keyframes breach-flash {
+    from { 
+      background-color: hsl(var(--destructive) / 0.2);
+      border-color: hsl(var(--destructive));
+    }
+    to { 
+      background-color: hsl(var(--destructive) / 0.4);
+      border-color: hsl(var(--destructive-dark));
+    }
+  }
+  
+  .holographic-border {
+    @apply relative;
+  }
+  
+  .holographic-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg opacity-75;
+    background: linear-gradient(45deg, transparent 30%, hsl(var(--primary) / 0.3) 50%, transparent 70%);
+    background-size: 200% 200%;
+    animation: holographic 3s linear infinite;
+  }
+  
+  @keyframes holographic {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
   }
 }
