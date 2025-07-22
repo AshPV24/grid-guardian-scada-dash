@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Power, Zap, AlertCircle, Activity, Shield, Database, Cpu } from 'lucide-react';
+import { AlertTriangle, Power, Zap, AlertCircle, Activity, Shield, Database, Cpu, Building2, Car, Fuel, Train, Factory } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PowerLoad {
@@ -55,11 +55,11 @@ const PowerGridDashboard = () => {
   ]);
 
   const [powerLoads, setPowerLoads] = useState<PowerLoad[]>([
-    { id: 'LOAD-1', name: 'Industrial Complex Alpha', power: 45.2, status: 'online', substation: 'A', priority: 'high' },
-    { id: 'LOAD-2', name: 'Residential Grid North', power: 28.7, status: 'online', substation: 'A', priority: 'normal' },
-    { id: 'LOAD-3', name: 'Commercial District Central', power: 52.1, status: 'online', substation: 'B', priority: 'high' },
-    { id: 'LOAD-4', name: 'Medical & Emergency Services', power: 31.8, status: 'online', substation: 'B', priority: 'critical' },
-    { id: 'LOAD-5', name: 'Water Treatment Facility', power: 22.5, status: 'online', substation: 'A', priority: 'critical' }
+    { id: 'LOAD-1', name: 'Metro City Grid', power: 45.2, status: 'online', substation: 'A', priority: 'high' },
+    { id: 'LOAD-2', name: 'EV Charging Station', power: 28.7, status: 'online', substation: 'B', priority: 'normal' },
+    { id: 'LOAD-3', name: 'Gas Station Complex', power: 15.3, status: 'online', substation: 'A', priority: 'normal' },
+    { id: 'LOAD-4', name: 'Central Train Station', power: 31.8, status: 'online', substation: 'B', priority: 'high' },
+    { id: 'LOAD-5', name: 'Industrial Factory Plant', power: 58.9, status: 'online', substation: 'A', priority: 'critical' }
   ]);
 
   // Update time every second
@@ -140,11 +140,11 @@ const PowerGridDashboard = () => {
     ]);
 
     setPowerLoads([
-      { id: 'LOAD-1', name: 'Industrial Complex Alpha', power: 45.2, status: 'online', substation: 'A', priority: 'high' },
-      { id: 'LOAD-2', name: 'Residential Grid North', power: 28.7, status: 'online', substation: 'A', priority: 'normal' },
-      { id: 'LOAD-3', name: 'Commercial District Central', power: 52.1, status: 'online', substation: 'B', priority: 'high' },
-      { id: 'LOAD-4', name: 'Medical & Emergency Services', power: 31.8, status: 'online', substation: 'B', priority: 'critical' },
-      { id: 'LOAD-5', name: 'Water Treatment Facility', power: 22.5, status: 'online', substation: 'A', priority: 'critical' }
+      { id: 'LOAD-1', name: 'Metro City Grid', power: 45.2, status: 'online', substation: 'A', priority: 'high' },
+      { id: 'LOAD-2', name: 'EV Charging Station', power: 28.7, status: 'online', substation: 'B', priority: 'normal' },
+      { id: 'LOAD-3', name: 'Gas Station Complex', power: 15.3, status: 'online', substation: 'A', priority: 'normal' },
+      { id: 'LOAD-4', name: 'Central Train Station', power: 31.8, status: 'online', substation: 'B', priority: 'high' },
+      { id: 'LOAD-5', name: 'Industrial Factory Plant', power: 58.9, status: 'online', substation: 'A', priority: 'critical' }
     ]);
 
     toast({
@@ -190,6 +190,15 @@ const PowerGridDashboard = () => {
 
   const totalLoad = powerLoads.reduce((sum, load) => sum + load.power, 0);
   const onlineCount = powerLoads.filter(load => load.status === 'online').length;
+
+  const getStationIcon = (stationName: string) => {
+    if (stationName.includes('City')) return Building2;
+    if (stationName.includes('EV')) return Car;
+    if (stationName.includes('Gas')) return Fuel;
+    if (stationName.includes('Train')) return Train;
+    if (stationName.includes('Factory')) return Factory;
+    return Power;
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground p-6 relative">
@@ -333,12 +342,143 @@ const PowerGridDashboard = () => {
         </Card>
       </div>
 
+      {/* Network Topology - Modern Design */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
+          <Database className="w-6 h-6 text-accent" />
+          Real-Time Network Topology
+        </h2>
+        <Card className="scada-card border-accent/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent pointer-events-none"></div>
+          <CardContent className="p-8 relative z-10">
+            <div className="flex flex-col items-center space-y-8">
+              {/* Substations at top */}
+              <div className="flex justify-center gap-16">
+                {substations.map((substation) => (
+                  <div key={substation.id} className="flex flex-col items-center">
+                    <div className={`w-20 h-20 rounded-xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-xl transition-all duration-300 ${substation.status === 'emergency_shutdown' ? 'opacity-30 grayscale' : 'hover:scale-105'}`}>
+                      <Zap className="w-10 h-10 text-background" />
+                    </div>
+                    <div className="mt-3 text-center">
+                      <div className="font-bold text-primary-glow text-lg">{substation.name}</div>
+                      <div className="text-sm text-foreground-muted font-mono">{substation.id}</div>
+                      <div className="text-xs text-accent">{substation.voltage.toLocaleString()}V</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Power transmission lines with SVG */}
+              <div className="relative flex justify-center">
+                <svg width="400" height="80" className="absolute">
+                  <defs>
+                    <linearGradient id="powerFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                      <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+                      <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                    </linearGradient>
+                  </defs>
+                  
+                  {/* Left substation to center */}
+                  <path 
+                    d="M 80 10 Q 200 30 320 50" 
+                    stroke="url(#powerFlow)" 
+                    strokeWidth="3" 
+                    fill="none"
+                    className={`${substations[0]?.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
+                  />
+                  
+                  {/* Right substation to center */}
+                  <path 
+                    d="M 320 10 Q 200 30 80 50" 
+                    stroke="url(#powerFlow)" 
+                    strokeWidth="3" 
+                    fill="none"
+                    className={`${substations[1]?.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
+                  />
+                </svg>
+              </div>
+
+              {/* Distribution Hub */}
+              <div className="relative z-10">
+                <div className={`w-28 h-28 rounded-full bg-gradient-to-br from-accent to-accent-dark flex items-center justify-center shadow-2xl transition-all duration-300 ${isBreachActive ? 'opacity-30 grayscale' : 'hover:scale-105'}`}>
+                  <Activity className="w-14 h-14 text-background" />
+                </div>
+                <div className="absolute -top-3 -right-3 w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-secondary/30">
+                  <div className={`w-4 h-4 rounded-full ${onlineCount === 5 ? 'bg-secondary-glow' : 'bg-destructive'} animate-pulse`}></div>
+                </div>
+                <div className="mt-3 text-center">
+                  <div className="font-bold text-accent text-lg">Distribution Hub</div>
+                  <div className="text-sm text-foreground-muted">Load: {totalLoad.toFixed(1)} MW</div>
+                </div>
+              </div>
+
+              {/* Distribution lines to stations */}
+              <div className="relative">
+                <svg width="800" height="120" className="absolute -top-10">
+                  <defs>
+                    <linearGradient id="distributionFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+                      <stop offset="50%" stopColor="hsl(var(--secondary))" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+                    </linearGradient>
+                  </defs>
+                  
+                  {/* Distribution lines to each station */}
+                  {powerLoads.map((load, index) => {
+                    const startX = 400;
+                    const startY = 10;
+                    const endX = 100 + (index * 150);
+                    const endY = 100;
+                    const midX = (startX + endX) / 2;
+                    const midY = startY + 30;
+                    
+                    return (
+                      <g key={load.id}>
+                        <path 
+                          d={`M ${startX} ${startY} Q ${midX} ${midY} ${endX} ${endY}`}
+                          stroke="url(#distributionFlow)" 
+                          strokeWidth="2" 
+                          fill="none"
+                          className={`${load.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
+                        />
+                      </g>
+                    );
+                  })}
+                </svg>
+                
+                <div className="flex justify-center gap-6 mt-16">
+                  {powerLoads.map((load, index) => {
+                    const IconComponent = getStationIcon(load.name);
+                    return (
+                      <div key={load.id} className="flex flex-col items-center relative">
+                        {/* Station */}
+                        <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center shadow-xl transition-all duration-300 ${load.status === 'emergency_shutdown' ? 'opacity-30 grayscale' : 'hover:scale-110 hover:shadow-2xl'}`}>
+                          <IconComponent className="w-8 h-8 text-background" />
+                        </div>
+                        <div className="mt-3 text-center max-w-24">
+                          <div className="font-semibold text-secondary text-sm leading-tight">{load.name}</div>
+                          <div className="text-xs text-foreground-muted mt-1">{load.power} MW</div>
+                          <div className={`text-xs font-mono mt-1 px-2 py-1 rounded-full ${load.status === 'online' ? 'text-secondary bg-secondary/20' : 'text-destructive bg-destructive/20'}`}>
+                            {load.status === 'online' ? '● ACTIVE' : '● OFFLINE'}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         {/* Substations */}
         <div className="xl:col-span-1 space-y-6">
           <h2 className="text-2xl font-semibold flex items-center gap-3">
             <Zap className="w-6 h-6 text-primary" />
-            Substations
+            Power Generation
           </h2>
           {substations.map((substation) => (
             <Card key={substation.id} className="scada-card border-primary/20 relative overflow-hidden">
@@ -386,165 +526,56 @@ const PowerGridDashboard = () => {
           ))}
         </div>
 
-        {/* Power Loads */}
+        {/* Power Distribution */}
         <div className="xl:col-span-2 space-y-6">
           <h2 className="text-2xl font-semibold flex items-center gap-3">
             <Power className="w-6 h-6 text-secondary" />
-            Power Distribution Loads
+            Power Distribution Network
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {powerLoads.map((load) => (
-              <Card key={load.id} className="scada-card border-secondary/20 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent pointer-events-none"></div>
-                <CardHeader className="pb-3 relative z-10">
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="text-lg text-secondary-dark">{load.name}</CardTitle>
-                    <div className="flex flex-col gap-2">
-                      {getStatusBadge(load.status)}
-                      {getPriorityBadge(load.priority)}
+            {powerLoads.map((load) => {
+              const IconComponent = getStationIcon(load.name);
+              return (
+                <Card key={load.id} className="scada-card border-secondary/20 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent pointer-events-none"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center ${load.status === 'emergency_shutdown' ? 'opacity-30' : ''}`}>
+                          <IconComponent className="w-5 h-5 text-background" />
+                        </div>
+                        <CardTitle className="text-lg text-secondary-dark">{load.name}</CardTitle>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        {getStatusBadge(load.status)}
+                        {getPriorityBadge(load.priority)}
+                      </div>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-foreground-muted text-sm">Power Draw</p>
-                      <p className="metric-display text-base">{load.power}</p>
-                      <p className="text-xs text-foreground-muted">MW</p>
+                  </CardHeader>
+                  <CardContent className="relative z-10">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-foreground-muted text-sm">Power Draw</p>
+                        <p className="metric-display text-base">{load.power}</p>
+                        <p className="text-xs text-foreground-muted">MW</p>
+                      </div>
+                      <div>
+                        <p className="text-foreground-muted text-sm">Source</p>
+                        <p className="font-mono text-lg font-semibold">SUB-{load.substation}</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <p className="text-foreground-muted text-sm">Status</p>
+                        <div className={`status-indicator ${getStatusIndicator(load.status)} mt-2`}></div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-foreground-muted text-sm">Source</p>
-                      <p className="font-mono text-lg font-semibold">SUB-{load.substation}</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <p className="text-foreground-muted text-sm">Status</p>
-                      <div className={`status-indicator ${getStatusIndicator(load.status)} mt-2`}></div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Grid Topology Visualization */}
-      <Card className="mt-8 scada-card border-border/50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
-        <CardHeader className="relative z-10">
-          <CardTitle className="text-2xl flex items-center gap-3">
-            <Activity className="w-6 h-6 text-primary" />
-            Real-Time Grid Topology
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="relative z-10">
-          <div className="relative h-96 bg-gradient-to-br from-surface to-surface-elevated rounded-lg p-8 border border-border/30">
-            {/* Substations */}
-            <div className="absolute top-8 left-12">
-              <div className={`w-20 h-20 rounded-xl ${getStatusIndicator(substations[0].status)} flex flex-col items-center justify-center text-background font-bold text-sm shadow-glow transition-all duration-500`}>
-                <Zap className="w-6 h-6 mb-1" />
-                <span>SUB-A</span>
-              </div>
-              <div className="text-center mt-2 text-xs text-foreground-muted">Alpha Primary</div>
-            </div>
-            <div className="absolute top-8 right-12">
-              <div className={`w-20 h-20 rounded-xl ${getStatusIndicator(substations[1].status)} flex flex-col items-center justify-center text-background font-bold text-sm shadow-glow transition-all duration-500`}>
-                <Zap className="w-6 h-6 mb-1" />
-                <span>SUB-B</span>
-              </div>
-              <div className="text-center mt-2 text-xs text-foreground-muted">Beta Secondary</div>
-            </div>
-
-            {/* Transmission Lines */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none">
-              <defs>
-                <linearGradient id="powerFlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="currentColor" stopOpacity="0" />
-                  <stop offset="50%" stopColor="currentColor" stopOpacity="1" />
-                  <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              
-              {/* Lines from SUB-A */}
-              <line x1="92" y1="48" x2="200" y2="150" className="grid-connection text-primary" strokeDasharray="4 4" />
-              <line x1="92" y1="48" x2="200" y2="220" className="grid-connection text-primary" strokeDasharray="4 4" />
-              <line x1="92" y1="48" x2="200" y2="290" className="grid-connection text-primary" strokeDasharray="4 4" />
-              
-              {/* Lines from SUB-B */}
-              <line x1="calc(100% - 92px)" y1="48" x2="calc(100% - 200px)" y2="150" className="grid-connection text-secondary" strokeDasharray="4 4" />
-              <line x1="calc(100% - 92px)" y1="48" x2="calc(100% - 200px)" y2="220" className="grid-connection text-secondary" strokeDasharray="4 4" />
-
-              {/* Data flow animation */}
-              {!isBreachActive && (
-                <>
-                  <circle r="3" fill="url(#powerFlow)" className="text-primary">
-                    <animateMotion dur="2s" repeatCount="indefinite" path="M92,48 L200,150" />
-                  </circle>
-                  <circle r="3" fill="url(#powerFlow)" className="text-secondary">
-                    <animateMotion dur="2.5s" repeatCount="indefinite" path="M calc(100% - 92px),48 L calc(100% - 200px),150" />
-                  </circle>
-                </>
-              )}
-            </svg>
-
-            {/* Load Centers */}
-            <div className="absolute top-32 left-48">
-              <div className={`w-14 h-14 rounded-lg ${getStatusIndicator(powerLoads[0].status)} flex flex-col items-center justify-center text-background font-bold text-xs shadow-glow-success transition-all duration-500`}>
-                <Power className="w-4 h-4 mb-1" />
-                <span>L1</span>
-              </div>
-              <div className="text-center mt-1 text-xs text-foreground-muted">Industrial</div>
-            </div>
-            
-            <div className="absolute top-48 left-48">
-              <div className={`w-14 h-14 rounded-lg ${getStatusIndicator(powerLoads[1].status)} flex flex-col items-center justify-center text-background font-bold text-xs shadow-glow-success transition-all duration-500`}>
-                <Power className="w-4 h-4 mb-1" />
-                <span>L2</span>
-              </div>
-              <div className="text-center mt-1 text-xs text-foreground-muted">Residential</div>
-            </div>
-            
-            <div className="absolute bottom-20 left-48">
-              <div className={`w-14 h-14 rounded-lg ${getStatusIndicator(powerLoads[4].status)} flex flex-col items-center justify-center text-background font-bold text-xs shadow-glow-success transition-all duration-500`}>
-                <Power className="w-4 h-4 mb-1" />
-                <span>L5</span>
-              </div>
-              <div className="text-center mt-1 text-xs text-foreground-muted">Water Plant</div>
-            </div>
-            
-            <div className="absolute top-32 right-48">
-              <div className={`w-14 h-14 rounded-lg ${getStatusIndicator(powerLoads[2].status)} flex flex-col items-center justify-center text-background font-bold text-xs shadow-glow-success transition-all duration-500`}>
-                <Power className="w-4 h-4 mb-1" />
-                <span>L3</span>
-              </div>
-              <div className="text-center mt-1 text-xs text-foreground-muted">Commercial</div>
-            </div>
-            
-            <div className="absolute top-48 right-48">
-              <div className={`w-14 h-14 rounded-lg ${getStatusIndicator(powerLoads[3].status)} flex flex-col items-center justify-center text-background font-bold text-xs shadow-glow-success transition-all duration-500`}>
-                <Power className="w-4 h-4 mb-1" />
-                <span>L4</span>
-              </div>
-              <div className="text-center mt-1 text-xs text-foreground-muted">Hospital</div>
-            </div>
-
-            {/* Legend */}
-            <div className="absolute bottom-4 right-4 bg-surface/80 backdrop-blur-sm rounded-lg p-3 border border-border/30">
-              <div className="text-xs text-foreground-muted mb-2">Status Legend</div>
-              <div className="flex flex-col gap-1 text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-grid-online"></div>
-                  <span>Online</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-grid-emergency animate-pulse"></div>
-                  <span>Emergency</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
