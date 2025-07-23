@@ -448,41 +448,69 @@ const PowerGridDashboard = () => {
                 </div>
               </div>
 
-              {/* Distribution lines to stations */}
+              {/* Distribution lines to stations - Properly connected */}
               <div className="relative">
-                <svg width="800" height="120" className="absolute -top-10">
-                  <defs>
-                    <linearGradient id="distributionFlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="1" />
-                      <stop offset="50%" stopColor="hsl(var(--secondary))" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="1" />
-                    </linearGradient>
-                  </defs>
-                  
-                  {/* Distribution lines to each station */}
-                  {powerLoads.map((load, index) => {
-                    const startX = 400;
-                    const startY = 10;
-                    const endX = 100 + (index * 150);
-                    const endY = 100;
-                    const midX = (startX + endX) / 2;
-                    const midY = startY + 30;
+                <div className="flex justify-center gap-6 mt-16 relative">
+                  {/* SVG overlay positioned to match stations exactly */}
+                  <svg 
+                    width="100%" 
+                    height="150" 
+                    className="absolute top-0 left-0 pointer-events-none"
+                    style={{ top: '-100px' }}
+                  >
+                    <defs>
+                      <linearGradient id="distributionFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+                        <stop offset="50%" stopColor="hsl(var(--secondary))" stopOpacity="0.8" />
+                        <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+                      </linearGradient>
+                    </defs>
                     
-                    return (
-                      <g key={load.id}>
-                        <path 
-                          d={`M ${startX} ${startY} Q ${midX} ${midY} ${endX} ${endY}`}
-                          stroke="url(#distributionFlow)" 
-                          strokeWidth="2" 
-                          fill="none"
-                          className={`${load.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
-                        />
-                      </g>
-                    );
-                  })}
-                </svg>
-                
-                <div className="flex justify-center gap-6 mt-16">
+                    {/* Distribution hub position (center) */}
+                    {powerLoads.map((load, index) => {
+                      // Calculate exact positions based on flex layout
+                      const containerWidth = 800; // Approximate container width
+                      const gapSize = 24; // gap-6 = 24px
+                      const stationWidth = 64; // w-16 = 64px
+                      const totalStations = 5;
+                      const totalGaps = (totalStations - 1) * gapSize;
+                      const totalStationWidth = totalStations * stationWidth;
+                      const availableSpace = containerWidth - totalStationWidth - totalGaps;
+                      const startOffset = availableSpace / 2;
+                      
+                      const centerX = containerWidth / 2; // Distribution hub center
+                      const centerY = 100; // Distribution hub Y position
+                      
+                      const stationX = startOffset + (index * (stationWidth + gapSize)) + (stationWidth / 2);
+                      const stationY = 200; // Station Y position
+                      
+                      const controlX = (centerX + stationX) / 2;
+                      const controlY = centerY + 40;
+                      
+                      return (
+                        <g key={load.id}>
+                          <path 
+                            d={`M ${centerX} ${centerY} Q ${controlX} ${controlY} ${stationX} ${stationY}`}
+                            stroke="url(#distributionFlow)" 
+                            strokeWidth="3" 
+                            fill="none"
+                            className={`${load.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
+                          />
+                          
+                          {/* Power flow animation for active stations */}
+                          {load.status !== 'emergency_shutdown' && (
+                            <circle r="4" fill="hsl(var(--secondary-glow))" className="animate-pulse">
+                              <animateMotion dur="3s" repeatCount="indefinite">
+                                <path d={`M ${centerX} ${centerY} Q ${controlX} ${controlY} ${stationX} ${stationY}`} />
+                              </animateMotion>
+                            </circle>
+                          )}
+                        </g>
+                      );
+                    })}
+                  </svg>
+
+                  {/* Stations positioned exactly where lines connect */}
                   {powerLoads.map((load, index) => {
                     const IconComponent = getStationIcon(load.name);
                     return (
