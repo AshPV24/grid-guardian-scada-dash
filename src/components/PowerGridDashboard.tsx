@@ -448,88 +448,26 @@ const PowerGridDashboard = () => {
                 </div>
               </div>
 
-              {/* Distribution lines to stations - Properly connected */}
-              <div className="relative">
-                <div className="flex justify-center gap-6 mt-16 relative">
-                  {/* SVG overlay positioned to match stations exactly */}
-                  <svg 
-                    width="100%" 
-                    height="150" 
-                    className="absolute top-0 left-0 pointer-events-none"
-                    style={{ top: '-100px' }}
-                  >
-                    <defs>
-                      <linearGradient id="distributionFlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="1" />
-                        <stop offset="50%" stopColor="hsl(var(--secondary))" stopOpacity="0.8" />
-                        <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="1" />
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Distribution hub position (center) */}
-                    {powerLoads.map((load, index) => {
-                      // Calculate exact positions based on flex layout
-                      const containerWidth = 800; // Approximate container width
-                      const gapSize = 24; // gap-6 = 24px
-                      const stationWidth = 64; // w-16 = 64px
-                      const totalStations = 5;
-                      const totalGaps = (totalStations - 1) * gapSize;
-                      const totalStationWidth = totalStations * stationWidth;
-                      const availableSpace = containerWidth - totalStationWidth - totalGaps;
-                      const startOffset = availableSpace / 2;
-                      
-                      const centerX = containerWidth / 2; // Distribution hub center
-                      const centerY = 100; // Distribution hub Y position
-                      
-                      const stationX = startOffset + (index * (stationWidth + gapSize)) + (stationWidth / 2);
-                      const stationY = 200; // Station Y position
-                      
-                      const controlX = (centerX + stationX) / 2;
-                      const controlY = centerY + 40;
-                      
-                      return (
-                        <g key={load.id}>
-                          <path 
-                            d={`M ${centerX} ${centerY} Q ${controlX} ${controlY} ${stationX} ${stationY}`}
-                            stroke="url(#distributionFlow)" 
-                            strokeWidth="3" 
-                            fill="none"
-                            className={`${load.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
-                          />
-                          
-                          {/* Power flow animation for active stations */}
-                          {load.status !== 'emergency_shutdown' && (
-                            <circle r="4" fill="hsl(var(--secondary-glow))" className="animate-pulse">
-                              <animateMotion dur="3s" repeatCount="indefinite">
-                                <path d={`M ${centerX} ${centerY} Q ${controlX} ${controlY} ${stationX} ${stationY}`} />
-                              </animateMotion>
-                            </circle>
-                          )}
-                        </g>
-                      );
-                    })}
-                  </svg>
-
-                  {/* Stations positioned exactly where lines connect */}
-                  {powerLoads.map((load, index) => {
-                    const IconComponent = getStationIcon(load.name);
-                    return (
-                      <div key={load.id} className="flex flex-col items-center relative">
-                        {/* Station */}
-                        <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center shadow-xl transition-all duration-300 ${load.status === 'emergency_shutdown' ? 'opacity-30 grayscale' : 'hover:scale-110 hover:shadow-2xl'}`}>
-                          <IconComponent className="w-8 h-8 text-background" />
-                        </div>
-                        <div className="mt-3 text-center max-w-24">
-                          <div className="font-semibold text-secondary text-sm leading-tight">{load.name}</div>
-                          <div className="text-xs text-foreground-muted mt-1">{load.power} MW</div>
-                          <div className={`text-xs font-mono mt-1 px-2 py-1 rounded-full ${load.status === 'online' ? 'text-secondary bg-secondary/20' : 'text-destructive bg-destructive/20'}`}>
-                            {load.status === 'online' ? '● ACTIVE' : '● OFFLINE'}
-                          </div>
+              {/* Stations positioned under the distribution hub */}
+              <div className="flex justify-center gap-6 mt-8">
+                {powerLoads.map((load, index) => {
+                  const IconComponent = getStationIcon(load.name);
+                  return (
+                    <div key={load.id} className="flex flex-col items-center relative">
+                      {/* Station */}
+                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center shadow-xl transition-all duration-300 ${load.status === 'emergency_shutdown' ? 'opacity-30 grayscale' : 'hover:scale-110 hover:shadow-2xl'}`}>
+                        <IconComponent className="w-8 h-8 text-background" />
+                      </div>
+                      <div className="mt-3 text-center max-w-24">
+                        <div className="font-semibold text-secondary text-sm leading-tight">{load.name}</div>
+                        <div className="text-xs text-foreground-muted mt-1">{load.power} MW</div>
+                        <div className={`text-xs font-mono mt-1 px-2 py-1 rounded-full ${load.status === 'online' ? 'text-secondary bg-secondary/20' : 'text-destructive bg-destructive/20'}`}>
+                          {load.status === 'online' ? '● ACTIVE' : '● OFFLINE'}
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </CardContent>
