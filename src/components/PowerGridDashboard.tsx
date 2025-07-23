@@ -68,6 +68,20 @@ const PowerGridDashboard = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Listen for remote breach commands
+  useEffect(() => {
+    const checkForRemoteBreach = () => {
+      const remoteCommand = localStorage.getItem('remoteBreach');
+      if (remoteCommand === 'trigger' && !isBreachActive) {
+        localStorage.removeItem('remoteBreach');
+        simulateBreach();
+      }
+    };
+    
+    const interval = setInterval(checkForRemoteBreach, 500);
+    return () => clearInterval(interval);
+  }, [isBreachActive]);
+
   const simulateBreach = () => {
     setIsBreachActive(true);
     setShutdownTimer(10);
@@ -368,34 +382,55 @@ const PowerGridDashboard = () => {
                 ))}
               </div>
 
-              {/* Power transmission lines with SVG */}
+              {/* Power transmission lines with SVG - Fixed connections */}
               <div className="relative flex justify-center">
-                <svg width="400" height="80" className="absolute">
+                <svg width="600" height="120" className="absolute">
                   <defs>
                     <linearGradient id="powerFlow" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
                       <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="1" />
                       <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
                     </linearGradient>
+                    <linearGradient id="powerFlowReverse" x1="100%" y1="0%" x2="0%" y2="0%">
+                      <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                      <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+                      <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                    </linearGradient>
                   </defs>
                   
-                  {/* Left substation to center */}
+                  {/* Alpha Primary (left) to Distribution Hub (center) */}
                   <path 
-                    d="M 80 10 Q 200 30 320 50" 
+                    d="M 120 20 Q 250 40 300 80" 
                     stroke="url(#powerFlow)" 
-                    strokeWidth="3" 
+                    strokeWidth="4" 
                     fill="none"
                     className={`${substations[0]?.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
                   />
                   
-                  {/* Right substation to center */}
+                  {/* Beta Secondary (right) to Distribution Hub (center) */}
                   <path 
-                    d="M 320 10 Q 200 30 80 50" 
-                    stroke="url(#powerFlow)" 
-                    strokeWidth="3" 
+                    d="M 480 20 Q 350 40 300 80" 
+                    stroke="url(#powerFlowReverse)" 
+                    strokeWidth="4" 
                     fill="none"
                     className={`${substations[1]?.status === 'emergency_shutdown' ? 'opacity-30' : ''} transition-opacity duration-300`}
                   />
+
+                  {/* Power flow animation circles */}
+                  {!isBreachActive && (
+                    <>
+                      <circle r="4" fill="hsl(var(--accent))" className="animate-pulse">
+                        <animateMotion dur="2s" repeatCount="indefinite">
+                          <path d="M 120 20 Q 250 40 300 80" />
+                        </animateMotion>
+                      </circle>
+                      <circle r="4" fill="hsl(var(--accent))" className="animate-pulse">
+                        <animateMotion dur="2s" repeatCount="indefinite">
+                          <path d="M 480 20 Q 350 40 300 80" />
+                        </animateMotion>
+                      </circle>
+                    </>
+                  )}
                 </svg>
               </div>
 

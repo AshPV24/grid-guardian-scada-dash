@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Breach Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .control-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            min-width: 350px;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+        
+        .breach-button {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border: none;
+            color: white;
+            padding: 20px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        }
+        
+        .breach-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+        }
+        
+        .breach-button:active {
+            transform: translateY(0);
+        }
+        
+        .breach-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .status.ready {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+        
+        .status.sent {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+        
+        .instructions {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: left;
+        }
+        
+        .network-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .network-info h3 {
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        
+        .ip-address {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
+            border-radius: 5px;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h1 class="title">🚨 Remote Breach Control</h1>
+        <p class="subtitle">SCADA Grid Emergency Override</p>
+        
+        <div class="network-info">
+            <h3>Access Information</h3>
+            <p>Network IP: <span class="ip-address" id="network-ip">Loading...</span></p>
+            <p style="margin-top: 8px; color: #94a3b8; font-size: 12px;">
+                Connect your phone to the same WiFi network and visit this IP
+            </p>
+        </div>
+        
+        <div id="status" class="status ready">
+            ✅ SYSTEM READY - Standing by for breach command
+        </div>
+        
+        <button id="breachBtn" class="breach-button">
+            ⚡ TRIGGER CYBER ATTACK ⚡
+        </button>
+        
+        <div class="instructions">
+            <h3 style="color: #3b82f6; margin-bottom: 10px;">Instructions:</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 8px;">🔗 Ensure your device is on the same WiFi network</li>
+                <li style="margin-bottom: 8px;">📱 Access this page from your phone browser</li>
+                <li style="margin-bottom: 8px;">⚡ Click the button to trigger emergency shutdown</li>
+                <li style="margin-bottom: 8px;">🖥️ Watch the main dashboard for system response</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Get network IP address
+        async function getNetworkIP() {
+            try {
+                // This will show the current host
+                const host = window.location.host || 'localhost:5173';
+                document.getElementById('network-ip').textContent = host;
+                
+                // Try to get actual local IP
+                const rtc = new RTCPeerConnection({iceServers: []});
+                rtc.createDataChannel('');
+                rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
+                
+                rtc.onicecandidate = function(event) {
+                    if (event.candidate) {
+                        const candidate = event.candidate.candidate;
+                        const match = candidate.match(/(\d+\.\d+\.\d+\.\d+)/);
+                        if (match && !match[1].startsWith('127.')) {
+                            const localIP = match[1] + ':5173';
+                            document.getElementById('network-ip').textContent = localIP;
+                        }
+                    }
+                };
+            } catch (e) {
+                console.log('Could not determine local IP');
+            }
+        }
+
+        // Trigger breach function
+        function triggerBreach() {
+            const btn = document.getElementById('breachBtn');
+            const status = document.getElementById('status');
+            
+            // Store breach command in localStorage for main app to pick up
+            localStorage.setItem('remoteBreach', 'trigger');
+            
+            // Update UI
+            btn.disabled = true;
+            btn.textContent = '🔥 BREACH TRIGGERED 🔥';
+            status.className = 'status sent';
+            status.textContent = '⚡ ATTACK COMMAND SENT - Check main dashboard';
+            
+            // Show success animation
+            btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = '⚡ TRIGGER CYBER ATTACK ⚡';
+                btn.style.background = 'linear-gradient(135deg, #dc2626, #b91c1c)';
+                status.className = 'status ready';
+                status.textContent = '✅ SYSTEM READY - Standing by for breach command';
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            getNetworkIP();
+            document.getElementById('breachBtn').addEventListener('click', triggerBreach);
+        });
+    </script>
+</body>
+</html>
