@@ -196,14 +196,25 @@
             const btn = document.getElementById('breachBtn');
             const status = document.getElementById('status');
             
-            // Store breach command in localStorage for main app to pick up
-            localStorage.setItem('remoteBreach', 'trigger');
+            // Get target from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const target = urlParams.get('target') || 'grid';
+            
+            const targetMap = {
+                'grid': 'gridBreach',
+                'airport': 'airportBreach', 
+                'train': 'trainBreach',
+                'oilrig': 'oilRigBreach'
+            };
+            
+            const storageKey = targetMap[target] || 'gridBreach';
+            localStorage.setItem(storageKey, 'true');
             
             // Update UI
             btn.disabled = true;
             btn.textContent = '🔥 BREACH TRIGGERED 🔥';
             status.className = 'status sent';
-            status.textContent = '⚡ ATTACK COMMAND SENT - Check main dashboard';
+            status.textContent = `⚡ ${target.toUpperCase()} SYSTEMS COMPROMISED - Check main dashboard`;
             
             // Show success animation
             btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';

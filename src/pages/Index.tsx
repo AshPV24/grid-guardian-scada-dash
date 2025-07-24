@@ -1,7 +1,7 @@
-import PowerGridDashboard from "@/components/PowerGridDashboard";
+import MainPage from "./MainPage";
 
 const Index = () => {
-  return <PowerGridDashboard />;
+  return <MainPage />;
 };
 
 export default Index;
