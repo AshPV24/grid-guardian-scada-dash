@@ -126,13 +126,13 @@ const AirportControl = () => {
           </Card>
         )}
 
-        <Tabs defaultValue="power" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="power">Power Systems</TabsTrigger>
-            <TabsTrigger value="flights">Flight Operations</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="power" className="space-y-6">
+        <div className="space-y-8">
+          {/* Power Systems Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Zap className="w-6 h-6 text-accent" />
+              Power Systems
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {powerSystems.map((system) => (
                 <Card key={system.id} className="bg-card/80 backdrop-blur-sm">
@@ -167,9 +167,14 @@ const AirportControl = () => {
                 </Card>
               ))}
             </div>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="flights" className="space-y-6">
+          {/* Flight Operations Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Plane className="w-6 h-6 text-accent" />
+              Flight Operations
+            </h2>
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -197,8 +202,8 @@ const AirportControl = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

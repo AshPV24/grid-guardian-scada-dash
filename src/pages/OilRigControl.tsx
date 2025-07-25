@@ -142,13 +142,13 @@ const OilRigControl = () => {
           </Card>
         )}
 
-        <Tabs defaultValue="fluids" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="fluids">Fluid Levels</TabsTrigger>
-            <TabsTrigger value="drilling">Drilling Operations</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="fluids" className="space-y-6">
+        <div className="space-y-8">
+          {/* Fluid Levels Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Droplets className="w-6 h-6 text-warning" />
+              Fluid Level Monitoring
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {fluidLevels.map((fluid) => (
                 <Card key={fluid.id} className="bg-card/80 backdrop-blur-sm">
@@ -183,9 +183,14 @@ const OilRigControl = () => {
                 </Card>
               ))}
             </div>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="drilling" className="space-y-6">
+          {/* Drilling Operations Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Gauge className="w-6 h-6 text-warning" />
+              Drilling Operations
+            </h2>
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -223,8 +228,8 @@ const OilRigControl = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -137,13 +137,13 @@ const TrainControl = () => {
           </Card>
         )}
 
-        <Tabs defaultValue="signals" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signals">Traffic Signals</TabsTrigger>
-            <TabsTrigger value="trains">Train Movement</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="signals" className="space-y-6">
+        <div className="space-y-8">
+          {/* Traffic Signals Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <MapPin className="w-6 h-6 text-secondary" />
+              Traffic Signals
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trafficLights.map((light) => (
                 <Card key={light.id} className="bg-card/80 backdrop-blur-sm">
@@ -172,9 +172,14 @@ const TrainControl = () => {
                 </Card>
               ))}
             </div>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="trains" className="space-y-6">
+          {/* Train Movement Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Train className="w-6 h-6 text-secondary" />
+              Train Movement
+            </h2>
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -205,8 +210,8 @@ const TrainControl = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const MainPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted p-8">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-teal-900 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
