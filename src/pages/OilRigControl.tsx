@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Waves, Gauge, AlertTriangle, Shield, Droplets } from "lucide-react";
+import OilRigTopology from "@/components/OilRigTopology";
 import { useNavigate } from "react-router-dom";
 
 const OilRigControl = () => {
@@ -96,7 +97,7 @@ const OilRigControl = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-warning/10 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-teal-900 p-6">
       {isBreached && (
         <div className="fixed inset-0 bg-destructive/20 backdrop-blur-sm z-40 pointer-events-none animate-pulse" />
       )}
@@ -143,9 +144,22 @@ const OilRigControl = () => {
         )}
 
         <div className="space-y-8">
+          {/* Topology Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
+              <Waves className="w-6 h-6 text-warning" />
+              Oil Rig Infrastructure Topology
+            </h2>
+            <Card className="bg-card/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <OilRigTopology fluidLevels={fluidLevels} />
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Fluid Levels Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
               <Droplets className="w-6 h-6 text-warning" />
               Fluid Level Monitoring
             </h2>
@@ -187,7 +201,7 @@ const OilRigControl = () => {
 
           {/* Drilling Operations Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
               <Gauge className="w-6 h-6 text-warning" />
               Drilling Operations
             </h2>

@@ -80,7 +80,7 @@ const AirportControl = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-teal-900 p-6">
       {isBreached && (
         <div className="fixed inset-0 bg-destructive/20 backdrop-blur-sm z-40 pointer-events-none animate-pulse" />
       )}

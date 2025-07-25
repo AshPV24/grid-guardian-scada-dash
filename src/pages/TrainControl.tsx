@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Train, CircleDot, AlertTriangle, Shield, MapPin } from "lucide-react";
+import TrainTopology from "@/components/TrainTopology";
 import { useNavigate } from "react-router-dom";
 
 const TrainControl = () => {
@@ -91,7 +92,7 @@ const TrainControl = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-secondary/10 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-teal-900 p-6">
       {isBreached && (
         <div className="fixed inset-0 bg-destructive/20 backdrop-blur-sm z-40 pointer-events-none animate-pulse" />
       )}
@@ -138,9 +139,22 @@ const TrainControl = () => {
         )}
 
         <div className="space-y-8">
+          {/* Topology Section */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
+              <Train className="w-6 h-6 text-secondary" />
+              Railway Network Topology
+            </h2>
+            <Card className="bg-card/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <TrainTopology trafficLights={trafficLights} trains={trains} />
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Traffic Signals Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
               <MapPin className="w-6 h-6 text-secondary" />
               Traffic Signals
             </h2>
@@ -176,7 +190,7 @@ const TrainControl = () => {
 
           {/* Train Movement Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
               <Train className="w-6 h-6 text-secondary" />
               Train Movement
             </h2>
