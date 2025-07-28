@@ -92,16 +92,16 @@ const TrainControl = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-teal-900 p-6">
+    <div className="h-screen bg-gradient-to-br from-black via-slate-900 to-teal-900 p-6 overflow-hidden">
       {isBreached && (
         <div className="fixed inset-0 bg-destructive/20 backdrop-blur-sm z-40 pointer-events-none animate-pulse" />
       )}
       
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+      <div className="max-w-7xl mx-auto h-full flex flex-col">
+        <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-              <Train className="w-10 h-10 text-secondary" />
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+              <Train className="w-8 h-8 text-secondary" />
               Train Control Centre
             </h1>
             <p className="text-muted-foreground">Managing railway traffic signals and train movements</p>
@@ -123,107 +123,103 @@ const TrainControl = () => {
         </div>
 
         {isBreached && (
-          <Card className="border-destructive bg-destructive/10 mb-6 animate-breach-alert">
-            <CardHeader>
-              <CardTitle className="text-destructive flex items-center gap-2">
+          <Card className="border-destructive bg-destructive/10 mb-4 animate-breach-alert">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-destructive flex items-center gap-2 text-lg">
                 <AlertTriangle className="w-5 h-5" />
                 SECURITY BREACH DETECTED
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-destructive-foreground">
+            <CardContent className="pt-0">
+              <p className="text-destructive-foreground text-sm">
                 Critical railway systems compromised! All trains emergency stopped for safety.
               </p>
             </CardContent>
           </Card>
         )}
 
-        <div className="space-y-8">
-          {/* Topology Section */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
-              <Train className="w-6 h-6 text-secondary" />
+        <div className="flex-1 grid grid-cols-2 gap-6 min-h-0">
+          {/* Left Side - Topology */}
+          <div className="flex flex-col">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
+              <Train className="w-5 h-5 text-secondary" />
               Railway Network Topology
             </h2>
-            <Card className="bg-card/80 backdrop-blur-sm">
-              <CardContent className="p-6">
+            <Card className="bg-card/80 backdrop-blur-sm flex-1">
+              <CardContent className="p-4 h-full">
                 <TrainTopology trafficLights={trafficLights} trains={trains} />
               </CardContent>
             </Card>
           </div>
 
-          {/* Traffic Signals Section */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
-              <MapPin className="w-6 h-6 text-secondary" />
-              Traffic Signals
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {trafficLights.map((light) => (
-                <Card key={light.id} className="bg-card/80 backdrop-blur-sm">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <MapPin className="w-5 h-5 text-secondary" />
-                        {light.location}
-                      </CardTitle>
-                      <div className={`w-4 h-4 rounded-full ${getLightColor(light.status)} animate-pulse`} />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Status</span>
-                        <Badge className={`${getLightColor(light.status)} text-white`}>
-                          {light.status.toUpperCase()}
-                        </Badge>
+          {/* Right Side - Traffic Signals and Train Info */}
+          <div className="flex flex-col space-y-6">
+            {/* Traffic Signals Section */}
+            <div className="flex-1">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
+                <CircleDot className="w-5 h-5 text-secondary" />
+                Traffic Signals
+              </h2>
+              <div className="grid grid-cols-1 gap-4 h-full">
+                {trafficLights.slice(2, 4).map((light) => (
+                  <Card key={light.id} className="bg-card/80 backdrop-blur-sm">
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <CircleDot className="w-4 h-4 text-secondary" />
+                          {light.location}
+                        </CardTitle>
+                        <div className={`w-3 h-3 rounded-full ${getLightColor(light.status)} animate-pulse`} />
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        Last changed: {light.lastChange}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Train Movement Section */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
-              <Train className="w-6 h-6 text-secondary" />
-              Train Movement
-            </h2>
-            <Card className="bg-card/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Train className="w-5 h-5 text-secondary" />
-                  Active Trains
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {trains.map((train) => (
-                    <div key={train.id} className="flex items-center justify-between p-4 rounded-lg border border-border/50 bg-muted/30">
-                      <div className="flex items-center gap-4">
-                        <Badge variant="outline">{train.id}</Badge>
-                        <span className="font-medium">{train.route}</span>
-                        <Badge variant="secondary">Platform {train.platform}</Badge>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-sm text-muted-foreground">
-                          <div>Speed: {train.speed} km/h</div>
-                          <div>Next: {train.nextStop}</div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-sm">
+                          <span>Status</span>
+                          <Badge className={`${getLightColor(light.status)} text-white text-xs`}>
+                            {light.status.toUpperCase()}
+                          </Badge>
                         </div>
-                        <Badge className={getStatusColor(train.status)}>
-                          {train.status}
-                        </Badge>
+                        <div className="text-xs text-muted-foreground">
+                          Last changed: {light.lastChange}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Train Trajectory Section */}
+            <div className="flex-1">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
+                <Train className="w-5 h-5 text-secondary" />
+                Train Trajectory
+              </h2>
+              <Card className="bg-card/80 backdrop-blur-sm h-full">
+                <CardContent className="p-4">
+                  <div className="space-y-3">
+                    {trains.slice(0, 3).map((train) => (
+                      <div key={train.id} className="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-muted/30">
+                        <div className="flex items-center gap-3">
+                          <Badge variant="outline" className="text-xs">{train.id}</Badge>
+                          <span className="font-medium text-sm">{train.route}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="text-xs text-muted-foreground text-right">
+                            <div>Speed: {train.speed} km/h</div>
+                            <div>Next: {train.nextStop}</div>
+                          </div>
+                          <Badge className={`${getStatusColor(train.status)} text-xs`}>
+                            {train.status}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>

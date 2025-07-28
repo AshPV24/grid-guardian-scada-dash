@@ -31,159 +31,138 @@ interface TrainTopologyProps {
 
 const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
   const initialNodes: Node[] = useMemo(() => [
-    // Stations
+    // Stations (Red dots)
     {
       id: 'station-1',
       type: 'default',
-      position: { x: 200, y: 50 },
-      data: { 
-        label: 'Platform 1\nNorth Station' 
-      },
+      position: { x: 300, y: 50 },
+      data: { label: '' },
       style: { 
-        background: '#1e293b', 
-        color: 'white', 
-        border: '2px solid #0d9488',
-        borderRadius: '8px',
-        width: 120,
-        height: 60
+        background: '#dc2626', 
+        border: '2px solid #dc2626',
+        borderRadius: '50%',
+        width: 20,
+        height: 20,
+        padding: 0
       }
     },
     {
       id: 'station-2',
       type: 'default',
-      position: { x: 400, y: 200 },
-      data: { 
-        label: 'Platform 2\nEast Station' 
-      },
+      position: { x: 500, y: 200 },
+      data: { label: '' },
       style: { 
-        background: '#1e293b', 
-        color: 'white', 
-        border: '2px solid #0d9488',
-        borderRadius: '8px',
-        width: 120,
-        height: 60
+        background: '#dc2626', 
+        border: '2px solid #dc2626',
+        borderRadius: '50%',
+        width: 20,
+        height: 20,
+        padding: 0
       }
     },
     {
       id: 'station-3',
       type: 'default',
-      position: { x: 200, y: 350 },
-      data: { 
-        label: 'Platform 3\nSouth Station' 
-      },
+      position: { x: 300, y: 350 },
+      data: { label: '' },
       style: { 
-        background: '#1e293b', 
-        color: 'white', 
-        border: '2px solid #0d9488',
-        borderRadius: '8px',
-        width: 120,
-        height: 60
+        background: '#dc2626', 
+        border: '2px solid #dc2626',
+        borderRadius: '50%',
+        width: 20,
+        height: 20,
+        padding: 0
       }
     },
     {
       id: 'station-4',
       type: 'default',
-      position: { x: 0, y: 200 },
-      data: { 
-        label: 'Platform 4\nWest Station' 
-      },
+      position: { x: 100, y: 200 },
+      data: { label: '' },
       style: { 
-        background: '#1e293b', 
-        color: 'white', 
-        border: '2px solid #0d9488',
-        borderRadius: '8px',
-        width: 120,
-        height: 60
+        background: '#dc2626', 
+        border: '2px solid #dc2626',
+        borderRadius: '50%',
+        width: 20,
+        height: 20,
+        padding: 0
       }
     },
-    // Traffic Lights
+    // Traffic Lights (Green dots)
     {
       id: 'traffic-1',
       type: 'default',
-      position: { x: 300, y: 120 },
-      data: { 
-        label: `🚦\n${trafficLights[0]?.status?.toUpperCase() || 'GREEN'}\nMain Junction` 
-      },
+      position: { x: 400, y: 125 },
+      data: { label: '' },
       style: { 
-        background: getTrafficLightColor(trafficLights[0]?.status || 'green'), 
-        color: 'white',
-        border: '2px solid #374151',
+        background: '#16a34a', 
+        border: '2px solid #16a34a',
         borderRadius: '50%',
-        width: 80,
-        height: 80,
-        fontSize: '12px'
+        width: 16,
+        height: 16,
+        padding: 0
       }
     },
     {
       id: 'traffic-2',
       type: 'default',
-      position: { x: 100, y: 280 },
-      data: { 
-        label: `🚦\n${trafficLights[3]?.status?.toUpperCase() || 'YELLOW'}\nDepot Exit` 
-      },
+      position: { x: 200, y: 275 },
+      data: { label: '' },
       style: { 
-        background: getTrafficLightColor(trafficLights[3]?.status || 'yellow'), 
-        color: 'white',
-        border: '2px solid #374151',
+        background: '#16a34a', 
+        border: '2px solid #16a34a',
         borderRadius: '50%',
-        width: 80,
-        height: 80,
-        fontSize: '12px'
+        width: 16,
+        height: 16,
+        padding: 0
       }
     },
-    // Train (positioned dynamically based on status)
+    // Train (Blue line/rectangle)
     {
       id: 'train-active',
       type: 'default',
       position: getTrainPosition(trains),
-      data: { 
-        label: `🚂\n${trains.find(t => t.status === 'En Route')?.id || 'T003'}\n${trains.find(t => t.status === 'En Route')?.speed || 80} km/h` 
-      },
+      data: { label: '' },
       style: { 
-        background: '#dc2626', 
-        color: 'white',
-        border: '2px solid #fbbf24',
-        borderRadius: '8px',
-        width: 100,
-        height: 60,
-        fontSize: '11px'
+        background: '#2563eb', 
+        border: '2px solid #2563eb',
+        borderRadius: '4px',
+        width: 40,
+        height: 8,
+        padding: 0
       }
     }
   ], [trafficLights, trains]);
 
   const initialEdges: Edge[] = useMemo(() => [
-    // Circular track connections
+    // Circular track connections (Black lines)
     {
       id: 'track-1-2',
       source: 'station-1',
       target: 'station-2',
       type: 'smoothstep',
-      style: { stroke: '#0d9488', strokeWidth: 4 },
-      animated: true
+      style: { stroke: '#000000', strokeWidth: 4 }
     },
     {
       id: 'track-2-3',
       source: 'station-2',
       target: 'station-3',
       type: 'smoothstep',
-      style: { stroke: '#0d9488', strokeWidth: 4 },
-      animated: true
+      style: { stroke: '#000000', strokeWidth: 4 }
     },
     {
       id: 'track-3-4',
       source: 'station-3',
       target: 'station-4',
       type: 'smoothstep',
-      style: { stroke: '#0d9488', strokeWidth: 4 },
-      animated: true
+      style: { stroke: '#000000', strokeWidth: 4 }
     },
     {
       id: 'track-4-1',
       source: 'station-4',
       target: 'station-1',
       type: 'smoothstep',
-      style: { stroke: '#0d9488', strokeWidth: 4 },
-      animated: true
+      style: { stroke: '#000000', strokeWidth: 4 }
     }
   ], []);
 
@@ -232,11 +211,19 @@ function getTrafficLightColor(status: string): string {
 function getTrainPosition(trains: any[]): { x: number; y: number } {
   const movingTrain = trains.find(t => t.status === 'En Route');
   if (movingTrain) {
-    // Position train between stations based on speed
-    const progress = (movingTrain.speed / 100) * 0.5;
-    return { x: 250 + progress * 100, y: 150 + progress * 50 };
+    // Move train along circular track based on time
+    const time = Date.now() / 2000; // Slow down animation
+    const angle = (time % (2 * Math.PI));
+    const centerX = 300;
+    const centerY = 200;
+    const radius = 150;
+    
+    return { 
+      x: centerX + Math.cos(angle) * radius - 20, 
+      y: centerY + Math.sin(angle) * radius - 4
+    };
   }
-  return { x: 250, y: 150 };
+  return { x: 350, y: 125 }; // Default position between stations
 }
 
 export default TrainTopology;
