@@ -31,11 +31,11 @@ interface TrainTopologyProps {
 
 const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
   const initialNodes: Node[] = useMemo(() => [
-    // Stations (Red dots)
+    // Stations (Red dots) - Adjusted positions to fit in frame
     {
       id: 'station-1',
       type: 'default',
-      position: { x: 300, y: 50 },
+      position: { x: 250, y: 80 },
       data: { label: '' },
       style: { 
         background: '#dc2626', 
@@ -49,7 +49,7 @@ const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
     {
       id: 'station-2',
       type: 'default',
-      position: { x: 500, y: 200 },
+      position: { x: 380, y: 180 },
       data: { label: '' },
       style: { 
         background: '#dc2626', 
@@ -63,7 +63,7 @@ const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
     {
       id: 'station-3',
       type: 'default',
-      position: { x: 300, y: 350 },
+      position: { x: 250, y: 280 },
       data: { label: '' },
       style: { 
         background: '#dc2626', 
@@ -77,7 +77,7 @@ const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
     {
       id: 'station-4',
       type: 'default',
-      position: { x: 100, y: 200 },
+      position: { x: 120, y: 180 },
       data: { label: '' },
       style: { 
         background: '#dc2626', 
@@ -92,7 +92,7 @@ const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
     {
       id: 'traffic-1',
       type: 'default',
-      position: { x: 400, y: 125 },
+      position: { x: 315, y: 130 },
       data: { label: '' },
       style: { 
         background: '#16a34a', 
@@ -106,7 +106,7 @@ const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
     {
       id: 'traffic-2',
       type: 'default',
-      position: { x: 200, y: 275 },
+      position: { x: 185, y: 230 },
       data: { label: '' },
       style: { 
         background: '#16a34a', 
@@ -187,13 +187,6 @@ const TrainTopology = ({ trafficLights, trains }: TrainTopologyProps) => {
         zoomOnDoubleClick={false}
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#1e293b" />
-        <MiniMap 
-          style={{ 
-            backgroundColor: '#1e293b',
-            border: '1px solid #0d9488'
-          }}
-          maskColor="rgba(0, 0, 0, 0.1)"
-        />
       </ReactFlow>
     </div>
   );
@@ -211,19 +204,19 @@ function getTrafficLightColor(status: string): string {
 function getTrainPosition(trains: any[]): { x: number; y: number } {
   const movingTrain = trains.find(t => t.status === 'En Route');
   if (movingTrain) {
-    // Move train along circular track based on time
+    // Move train along circular track based on time - adjusted for new coordinates
     const time = Date.now() / 2000; // Slow down animation
     const angle = (time % (2 * Math.PI));
-    const centerX = 300;
-    const centerY = 200;
-    const radius = 150;
+    const centerX = 250;
+    const centerY = 180;
+    const radius = 100;
     
     return { 
       x: centerX + Math.cos(angle) * radius - 20, 
       y: centerY + Math.sin(angle) * radius - 4
     };
   }
-  return { x: 350, y: 125 }; // Default position between stations
+  return { x: 280, y: 140 }; // Default position between stations
 }
 
 export default TrainTopology;
