@@ -215,14 +215,14 @@ const PowerGridDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 relative">
+    <div className="h-screen bg-background text-foreground p-4 relative overflow-hidden flex flex-col">
       {/* Holographic background effect */}
       <div className="fixed inset-0 opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20"></div>
       </div>
 
       {/* Header */}
-      <div className="relative z-10 mb-8">
+      <div className="relative z-10 mb-4 flex-shrink-0">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
           <div className="space-y-4">
             <div className="flex items-center gap-4">
@@ -277,7 +277,7 @@ const PowerGridDashboard = () => {
 
       {/* Breach Alert */}
       {isBreachActive && shutdownTimer > 0 && (
-        <Card className="mb-8 border-destructive/50 bg-gradient-to-r from-destructive/10 via-destructive/5 to-destructive/10 breach-alert holographic-border">
+        <Card className="mb-4 border-destructive/50 bg-gradient-to-r from-destructive/10 via-destructive/5 to-destructive/10 breach-alert holographic-border flex-shrink-0">
           <CardContent className="p-6">
             <div className="flex items-center gap-6">
               <div className="w-16 h-16 bg-destructive/20 rounded-full flex items-center justify-center animate-pulse">
@@ -304,7 +304,7 @@ const PowerGridDashboard = () => {
       )}
 
       {/* System Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 flex-shrink-0">
         <Card className="scada-card border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -357,14 +357,14 @@ const PowerGridDashboard = () => {
       </div>
 
       {/* Network Topology - Modern Design */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
-          <Database className="w-6 h-6 text-accent" />
+      <div className="mb-4 flex-1 min-h-0">
+        <h2 className="text-xl font-semibold mb-3 flex items-center gap-3">
+          <Database className="w-5 h-5 text-accent" />
           Real-Time Network Topology
         </h2>
-        <Card className="scada-card border-accent/20 relative overflow-hidden">
+        <Card className="scada-card border-accent/20 relative overflow-hidden h-full flex flex-col">
           <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent pointer-events-none"></div>
-          <CardContent className="p-8 relative z-10">
+          <CardContent className="p-4 relative z-10 flex-1 overflow-auto">
             <div className="flex flex-col items-center space-y-8">
               {/* Substations at top */}
               <div className="flex justify-center gap-16">
