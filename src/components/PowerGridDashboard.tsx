@@ -221,48 +221,29 @@ const PowerGridDashboard = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20"></div>
       </div>
 
-      {/* Header */}
+      {/* System Status Bar */}
       <div className="relative z-10 mb-4 flex-shrink-0">
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-                <Zap className="w-6 h-6 text-background" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-primary-glow to-foreground bg-clip-text text-transparent">
-                  SCADA Grid Control Center
-                </h1>
-                <p className="text-foreground-muted text-lg">Enterprise Power Distribution Management System</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-6 text-sm font-mono">
-              <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-primary" />
-                <span className="text-foreground-muted">System Time:</span>
-                <span className="text-foreground font-semibold">{currentTime.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-secondary" />
-                <span className="text-foreground-muted">Security:</span>
-                <span className={`font-semibold ${isBreachActive ? 'text-destructive' : 'text-secondary'}`}>
-                  {isBreachActive ? 'BREACH DETECTED' : 'SECURE'}
-                </span>
-              </div>
-            </div>
+        <div className="flex items-center gap-6 text-sm font-mono bg-card/50 p-4 rounded-lg border">
+          <div className="flex items-center gap-2">
+            <Activity className="w-4 h-4 text-primary" />
+            <span className="text-foreground-muted">System Time:</span>
+            <span className="text-foreground font-semibold">{currentTime.toLocaleString()}</span>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              onClick={simulateBreach}
-              disabled={isBreachActive}
-              variant="destructive"
-              className="scada-button flex items-center gap-2 bg-gradient-to-r from-destructive to-destructive-dark hover:from-destructive-dark hover:to-destructive"
-            >
-              <AlertTriangle className="w-4 h-4" />
-              Simulate Cyber Attack
-            </Button>
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-secondary" />
+            <span className="text-foreground-muted">Security:</span>
+            <span className={`font-semibold ${isBreachActive ? 'text-destructive' : 'text-secondary'}`}>
+              {isBreachActive ? 'BREACH DETECTED' : 'SECURE'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Power className="w-4 h-4 text-primary" />
+            <span className="text-foreground-muted">Grid Status:</span>
+            <span className={`font-semibold ${isBreachActive ? 'text-destructive' : 'text-secondary'}`}>
+              {isBreachActive ? 'OFFLINE' : 'OPERATIONAL'}
+            </span>
+          </div>
+          <div className="ml-auto">
             <Button 
               onClick={restoreSystem}
               disabled={!isBreachActive && shutdownTimer === 0}
@@ -349,16 +330,29 @@ const PowerGridDashboard = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent pointer-events-none"></div>
             <CardContent className="p-6 relative z-10 h-full flex flex-col justify-center">
               <div className="flex flex-col items-center space-y-12">
-                {/* Substations at top */}
-                <div className="flex justify-center gap-32">
+                {/* Enterprise SCADA HMI Substations */}
+                <div className="flex justify-center gap-40">
                   {substations.map((substation) => (
                     <div key={substation.id} className="flex flex-col items-center">
-                      <div className={`w-24 h-24 rounded-xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-xl transition-all duration-300 ${substation.status === 'emergency_shutdown' ? 'opacity-30 grayscale' : 'hover:scale-105'}`}>
-                        <Zap className="w-12 h-12 text-background" />
+                      <div className={`w-32 h-24 rounded-lg border-2 ${
+                        substation.status === 'online' 
+                          ? 'border-secondary bg-secondary/10' 
+                          : 'border-destructive bg-destructive/10'
+                      } flex flex-col items-center justify-center shadow-xl backdrop-blur-sm transition-all duration-300`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className={`w-3 h-3 rounded-full ${
+                            substation.status === 'online' ? 'bg-secondary animate-pulse' : 'bg-destructive animate-pulse'
+                          }`}></div>
+                          <Cpu className={`w-5 h-5 ${substation.status === 'online' ? 'text-secondary' : 'text-destructive'}`} />
+                        </div>
+                        <div className="text-xs font-mono font-bold text-center">
+                          <div>{substation.voltage.toLocaleString()}V</div>
+                          <div>{substation.frequency}Hz</div>
+                        </div>
                       </div>
-                      <div className="mt-3 text-center">
-                        <div className="font-bold text-primary-glow text-lg">{substation.name}</div>
-                        <div className="text-sm text-foreground-muted font-mono">{substation.id}</div>
+                      <div className="mt-2 text-center">
+                        <div className="font-bold text-foreground text-sm">{substation.name}</div>
+                        <div className="text-xs text-foreground-muted font-mono">{substation.id}</div>
                       </div>
                     </div>
                   ))}
@@ -411,37 +405,56 @@ const PowerGridDashboard = () => {
                    </svg>
                  </div>
 
-                 {/* Distribution Hub */}
-                 <div className="relative z-10">
-                   <div className={`w-28 h-28 rounded-full bg-gradient-to-br from-accent to-accent-dark flex items-center justify-center shadow-2xl transition-all duration-300 ${isBreachActive ? 'opacity-30 grayscale' : 'hover:scale-105'}`}>
-                     <Activity className="w-14 h-14 text-background" />
-                   </div>
-                   <div className="absolute -top-3 -right-3 w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-secondary/30">
-                     <div className={`w-4 h-4 rounded-full ${onlineCount === 5 ? 'bg-secondary-glow' : 'bg-destructive'} animate-pulse`}></div>
-                   </div>
-                   <div className="mt-3 text-center">
-                     <div className="font-bold text-accent text-lg">Distribution Hub</div>
-                     <div className="text-sm text-foreground-muted">Load: {totalLoad.toFixed(1)} MW</div>
-                   </div>
-                 </div>
+                  {/* Enterprise Distribution Control Center */}
+                  <div className="relative z-10">
+                    <div className={`w-36 h-28 rounded-lg border-2 border-primary bg-primary/5 flex flex-col items-center justify-center shadow-2xl backdrop-blur-sm transition-all duration-300 ${isBreachActive ? 'opacity-30 grayscale' : ''}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`w-3 h-3 rounded-full ${onlineCount === 5 ? 'bg-secondary animate-pulse' : 'bg-destructive animate-pulse'}`}></div>
+                        <Database className="w-6 h-6 text-primary" />
+                        <div className="w-3 h-3 rounded-full bg-accent animate-pulse"></div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs font-mono font-bold text-primary">MAIN CONTROL</div>
+                        <div className="text-xs font-mono text-foreground-muted">{totalLoad.toFixed(1)} MW</div>
+                        <div className={`text-xs font-mono ${isBreachActive ? 'text-destructive' : 'text-secondary'}`}>
+                          {isBreachActive ? 'OFFLINE' : 'ONLINE'}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-2 text-center">
+                      <div className="font-bold text-foreground text-sm">Distribution Control</div>
+                      <div className="text-xs text-foreground-muted">Load: {totalLoad.toFixed(1)} MW</div>
+                    </div>
+                  </div>
 
-                 {/* Distribution lines to loads */}
-                 <div className="flex justify-center gap-6 mt-8">
-                   {powerLoads.map((load, index) => {
-                     const IconComponent = getStationIcon(load.name);
-                     return (
-                       <div key={load.id} className="flex flex-col items-center relative">
-                         <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center shadow-xl transition-all duration-300 ${load.status === 'emergency_shutdown' ? 'opacity-30 grayscale' : 'hover:scale-110 hover:shadow-2xl'}`}>
-                           <IconComponent className="w-8 h-8 text-background" />
-                         </div>
-                         <div className="mt-2 text-center max-w-20">
-                           <div className="font-semibold text-secondary text-xs leading-tight">{load.name}</div>
-                           <div className="text-xs text-foreground-muted mt-1">{load.power} MW</div>
-                         </div>
-                       </div>
-                     );
-                   })}
-                 </div>
+                  {/* Enterprise Load Management Terminals */}
+                  <div className="flex justify-center gap-4 mt-8">
+                    {powerLoads.map((load) => {
+                      const IconComponent = getStationIcon(load.name);
+                      return (
+                        <div key={load.id} className="flex flex-col items-center relative">
+                          <div className={`w-20 h-16 rounded-lg border-2 ${
+                            load.status === 'online' 
+                              ? 'border-accent bg-accent/10' 
+                              : 'border-destructive bg-destructive/10'
+                          } flex flex-col items-center justify-center shadow-xl backdrop-blur-sm transition-all duration-300`}>
+                            <div className="flex items-center gap-1 mb-1">
+                              <div className={`w-2 h-2 rounded-full ${
+                                load.status === 'online' ? 'bg-accent animate-pulse' : 'bg-destructive'
+                              }`}></div>
+                              <IconComponent className={`w-4 h-4 ${load.status === 'online' ? 'text-accent' : 'text-destructive'}`} />
+                            </div>
+                            <div className="text-xs font-mono font-bold text-center">
+                              {load.power}MW
+                            </div>
+                          </div>
+                          <div className="mt-1 text-center max-w-20">
+                            <div className="font-semibold text-foreground text-xs leading-tight">{load.name}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                </div>
              </CardContent>
            </Card>
